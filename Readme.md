@@ -23,6 +23,10 @@ CREATE EXTENSION pgvector;
 
 ## Backend
 
+```shell
+brew install tesseract
+```
+
 Copy the sample env and set your variables in .env
 
 ```shell

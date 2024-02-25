@@ -6,12 +6,14 @@ from typing import List
 
 from app.config import USER_NAME
 from app.models import FileVector
+from app.extractors import extract_text
 
 client = OpenAI()
 
 
 async def generate_and_store_embeddings(file_path: str, db: Session):
-    text = open(file_path, "r").read()
+
+    text = extract_text(file_path)
 
     response = client.embeddings.create(
         input=[text],
@@ -41,9 +43,8 @@ async def generate_query_vector(user_message: str):
 async def get_file_texts(file_paths: List[str]):
     file_data = []
     for path in file_paths:
-        with open(path, "r") as file:
-            text = file.read()
-            file_data.append({'path': path, 'text': text})
+        text = extract_text(path)
+        file_data.append({'path': path, 'text': text})
     return file_data
 
 
@@ -55,7 +56,7 @@ async def get_most_relevant_file_paths(query_vector, db: Session):
         .order_by(
             FileVector.embedding.max_inner_product(query_vector)
         )
-        .limit(1)
+        .limit(2)
     )
     results = db.execute(stmt).fetchall()
     file_paths = [row[0] for row in results]

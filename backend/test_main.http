@@ -5,7 +5,10 @@ Content-Type: application/json
 
 {
   "filePaths": [
-    "files/Wichtig/Zeugnisse/Bachelorzeugnis-2.txt"
+    "files/image.jpg",
+    "files/document.docx",
+    "files/textfile.txt",
+    "files/pdf-document.pdf"
   ]
 }
 

@@ -13,6 +13,8 @@ Thumbs.db # For Windows
 backend/venv/
 backend/*.sqlite3
 backend/.env
+/backend/logfile
+/backend/files/
 
 # Frontend specific
 frontend/node_modules/
