@@ -1,0 +1,12 @@
+# Test your FastAPI endpoints
+
+POST http://127.0.0.1:8000/process-file-paths/
+Content-Type: application/json
+
+{
+  "filePaths": [
+    "files/Wichtig/Zeugnisse/Bachelorzeugnis-2.txt"
+  ]
+}
+
+###

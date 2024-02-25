@@ -1,0 +1,31 @@
+# General
+*.log
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.db
+.local
+.DS_Store # For macOS
+Thumbs.db # For Windows
+
+# Backend specific
+backend/venv/
+backend/*.sqlite3
+backend/.env
+
+# Frontend specific
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/package-lock.json
+frontend/yarn.lock
+
+# IDE specific
+.idea/
+*.iml
+.vscode/
