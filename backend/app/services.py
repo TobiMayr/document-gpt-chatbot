@@ -1,25 +1,24 @@
+import time
+
 from openai import OpenAI
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from typing import List
+from sentence_transformers import SentenceTransformer
 
 from app.config import USER_NAME
 from app.models import FileVector
 from app.extractors import extract_text
 
 client = OpenAI()
+model = SentenceTransformer("msmarco-distilbert-base-tas-b")
 
 
 async def generate_and_store_embeddings(file_path: str, db: Session):
 
     text = extract_text(file_path)
-
-    response = client.embeddings.create(
-        input=[text],
-        model="text-embedding-ada-002"
-    )
-    embedding = response.data[0].embedding
+    embedding = model.encode(text)
 
     try:
         file_vector = db.query(FileVector).filter(FileVector.file_path == file_path).one()
@@ -32,12 +31,7 @@ async def generate_and_store_embeddings(file_path: str, db: Session):
 
 
 async def generate_query_vector(user_message: str):
-    response = client.embeddings.create(
-        input=user_message,
-        model="text-embedding-ada-002"
-    )
-    query_vector = response.data[0].embedding
-    return query_vector
+    return model.encode(user_message, show_progress_bar=False).tolist()
 
 
 async def get_file_texts(file_paths: List[str]):
@@ -77,8 +71,6 @@ async def ask_gpt_with_context(user_message: str, file_data: List[dict]):
     combined_text = "\n".join(f"File Path: {data['path']}\n File Content START:\n{data['text']}\n File Content END" for data in file_data)
 
     prompt = (_PROMPT.format(user_name=USER_NAME, combined_text=combined_text, user_message=user_message))
-
-
 
     chat_completion = client.chat.completions.create(
         model="gpt-3.5-turbo",

@@ -13,7 +13,7 @@ class FileVector(Base):
     __tablename__ = 'file_vector'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    embedding = Column(Vector(1536), nullable=False)
+    embedding = Column(Vector(768), nullable=False)
     file_path = Column(String, nullable=False, unique=True)
     created_at = Column(DateTime, default=func.now(), nullable=False)
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
